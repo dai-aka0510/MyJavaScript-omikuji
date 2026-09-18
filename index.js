@@ -40,5 +40,13 @@ form.addEventListener("submit", function (event) {
         resultLi.classList.add("list-group-item", "text-center", "fw-bold", "fs-5", "text-danger");
 
         ul.appendChild(resultLi);
+
+        const shareBtn = document.getElementById("share-btn");
+        //シェアした際の文面が出てくる
+        const shareText = encodeURIComponent(`${name} さんの今日の運勢は【${randomFortune}】でした！\nラッキーアイテム：${randomItem}\nラッキーカラー：${randomColor}\n\n#MyJavaScriptおみくじ`);
+        shareBtn.href = `https://twitter.com/intent/tweet?text=${shareText}`;
+        //Xのシェアボタン
+        shareBtn.classList.remove("d-none");
+
     }, 1500); // ← ここで待ち時間を調整（1500 = 1.5秒）
 });
