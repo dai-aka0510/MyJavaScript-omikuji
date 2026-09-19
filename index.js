@@ -11,6 +11,16 @@ form.addEventListener("submit", function (event) {
 
     if (input.value.trim() === "") return;
 
+    // ★ 1. 今日の日付（例: "2026-09-19"）と、最後に引いた日付を取得
+    const today = new Date().toISOString().split('T')[0];
+    const lastDrawnDate = localStorage.getItem("omikuji_last_date");
+
+    // ★ 2. 判定：すでに「今日」引いていたら処理をストップ！
+    if (lastDrawnDate === today) {
+        alert("おみくじは1日1回までです！また明日引いてね 🔮");
+        return; // ここで処理を中断して、下に行かせない
+    }
+
     // 入力した名前を一時保存
     const name = input.value;
     input.value = ""; // 先に入力欄をクリア
@@ -47,6 +57,9 @@ form.addEventListener("submit", function (event) {
         shareBtn.href = `https://twitter.com/intent/tweet?text=${shareText}`;
         //Xのシェアボタン
         shareBtn.classList.remove("d-none");
+
+        // ★ 3. おみくじ結果が出たら、「今日引いたよ（today）」をLocalStorageに保存！
+        localStorage.setItem("omikuji_last_date", today);
 
     }, 1500); // ← ここで待ち時間を調整（1500 = 1.5秒）
 });
