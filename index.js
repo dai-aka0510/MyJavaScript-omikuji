@@ -46,6 +46,13 @@ form.addEventListener("submit", function (event) {
 
         if (randomFortune === "超大吉 🌟") {
             fortuneClass = "result-ultra"; // 金ピカ
+
+            confetti({
+                particleCount: 100, // 紙吹雪の枚数
+                spread: 70,         // 広がり具合
+                origin: { y: 0.6 }  // 発射位置（画面の少し下めから）
+            });
+
         } else if (randomFortune === "大吉 ✨") {
             fortuneClass = "result-great"; // 赤
         } else if (randomFortune === "中吉 😊" || randomFortune === "小吉 🍀") {
