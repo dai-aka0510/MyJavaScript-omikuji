@@ -40,6 +40,19 @@ form.addEventListener("submit", function (event) {
         const randomColor = colors[Math.floor(Math.random() * colors.length)];
         const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
         const resultLi = document.createElement("li");
+
+        // ★ ここを追加：運勢によって style.css のクラス名を決める
+        let fortuneClass = "";
+
+        if (randomFortune === "超大吉 🌟") {
+            fortuneClass = "result-ultra"; // 金ピカ
+        } else if (randomFortune === "大吉 ✨") {
+            fortuneClass = "result-great"; // 赤
+        } else if (randomFortune === "中吉 😊" || randomFortune === "小吉 🍀") {
+            fortuneClass = "result-good";  // 緑
+        } else {
+            fortuneClass = "result-normal"; // グレー
+        }
         
         resultLi.innerHTML = `
             <p class="mb-2">${name} さんの今日の運勢：${randomFortune}</p>
@@ -47,7 +60,7 @@ form.addEventListener("submit", function (event) {
             <p class="fs-6 text-muted mb-0">ラッキーカラー：${randomColor}</p>
         `;
 
-        resultLi.classList.add("list-group-item", "text-center", "fw-bold", "fs-5", "text-danger");
+        resultLi.classList.add("list-group-item", "text-center", "fw-bold", "fs-5", "result-card", fortuneClass);
 
         ul.appendChild(resultLi);
 

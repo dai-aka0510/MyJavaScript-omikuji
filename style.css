@@ -1,0 +1,48 @@
+/* 結果カードの基本アニメーション */
+.result-card {
+    transition: all 0.5s ease;
+    border-width: 3px !important;
+}
+
+/* 1. 超大吉：金ピカ・グラデーション豪華仕様 */
+.result-ultra {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%) !important;
+    color: #856404 !important;
+    border-color: #ffc107 !important;
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+    transform: scale(1.02);
+}
+.result-ultra p {
+    color: #856404 !important; /* 文字色を強制上書き */
+}
+
+/* 2. 大吉：華やかな赤 */
+.result-great {
+    background-color: #f8d7da !important;
+    color: #842029 !important;
+    border-color: #f5c2c7 !important;
+    box-shadow: 0 4px 10px rgba(220, 53, 69, 0.2);
+}
+.result-great p {
+    color: #842029 !important;
+}
+
+/* 3. 中吉・小吉：明るい緑 */
+.result-good {
+    background-color: #d1e7dd !important;
+    color: #0f5132 !important;
+    border-color: #badbcc !important;
+}
+.result-good p {
+    color: #0f5132 !important;
+}
+
+/* 4. 吉・末吉：落ち着いたグレー */
+.result-normal {
+    background-color: #f8f9fa !important;
+    color: #41464b !important;
+    border-color: #e2e3e5 !important;
+}
+.result-normal p {
+    color: #41464b !important;
+}
