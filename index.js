@@ -6,80 +6,114 @@ const fortunes = ["超大吉 🌟", "大吉 ✨", "中吉 😊", "小吉 🍀", 
 const items = ["招き猫 🐱", "お守り ✨", "赤いペン 🖊️", "新しい靴下 🧦", "カフェラテ ☕"];
 const colors = ["金色 ⭐", "赤 ❤️", "青 💙", "緑 💚", "ピンク 💖", "白 🤍"];
 
+// ★ Web Audio APIを使った「ガラガラ...」効果音生成関数
+function playOmikujiSound() {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // 1.5秒間で小さなノイズ（木が擦れ合う音）を連続生成
+    for (let i = 0; i < 12; i++) {
+        setTimeout(() => {
+            const bufferSize = audioCtx.sampleRate * 0.05; // 0.05秒の短音
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            for (let j = 0; j < bufferSize; j++) {
+                data[j] = Math.random() * 2 - 1; // ホワイトノイズ
+            }
+
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
+
+            // 低音フィルタ（木のくもった音を表現）
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = "lowpass";
+            filter.frequency.value = 800 + Math.random() * 400;
+
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            noise.start();
+        }, i * 110);
+    }
+}
+
 form.addEventListener("submit", function (event) {
     event.preventDefault();
 
     if (input.value.trim() === "") return;
 
-    // ★ 1. 今日の日付（例: "2026-09-19"）と、最後に引いた日付を取得
+    // 1. 今日の日付を取得して重複確認
     const today = new Date().toISOString().split('T')[0];
     const lastDrawnDate = localStorage.getItem("omikuji_last_date");
 
-    // ★ 2. 判定：すでに「今日」引いていたら処理をストップ！
     if (lastDrawnDate === today) {
         alert("おみくじは1日1回までです！また明日引いてね 🔮");
-        return; // ここで処理を中断して、下に行かせない
+        return;
     }
 
-    // 入力した名前を一時保存
     const name = input.value;
-    input.value = ""; // 先に入力欄をクリア
+    input.value = "";
 
-    // 1. 画面を一度クリアして「占っています...」を表示
+    // 2. 効果音を鳴らす
+    playOmikujiSound();
+
+    // 3. シャカシャカ揺れるおみくじアニメーションを表示（Step 2）
     ul.innerHTML = "";
     const loadingLi = document.createElement("li");
-    loadingLi.textContent = "🔮 占っています...";
-    loadingLi.classList.add("list-group-item", "text-center", "fw-bold", "text-muted", "fs-5");
+    loadingLi.innerHTML = `
+        <div class="omikuji-box-anim">🪘</div>
+        <div class="fs-5 fw-bold text-secondary">ガラガラ… 運勢を占っています…</div>
+    `;
+    loadingLi.classList.add("list-group-item", "text-center", "py-4", "border-0", "bg-transparent");
     ul.appendChild(loadingLi);
 
-    // 2. setTimeoutで1.5秒（1500ms）遅らせて結果を出す！
+    // 4. 1.5秒後に結果を表示
     setTimeout(function () {
-        ul.innerHTML = ""; // 「占っています...」を消す
+        ul.innerHTML = "";
 
         const randomItem = items[Math.floor(Math.random() * items.length)];
         const randomColor = colors[Math.floor(Math.random() * colors.length)];
         const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
         const resultLi = document.createElement("li");
 
-        // ★ ここを追加：運勢によって style.css のクラス名を決める
         let fortuneClass = "";
 
         if (randomFortune === "超大吉 🌟") {
-            fortuneClass = "result-ultra"; // 金ピカ
-
+            fortuneClass = "result-ultra";
             confetti({
-                particleCount: 100, // 紙吹雪の枚数
-                spread: 70,         // 広がり具合
-                origin: { y: 0.6 }  // 発射位置（画面の少し下めから）
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.6 }
             });
-
         } else if (randomFortune === "大吉 ✨") {
-            fortuneClass = "result-great"; // 赤
+            fortuneClass = "result-great";
         } else if (randomFortune === "中吉 😊" || randomFortune === "小吉 🍀") {
-            fortuneClass = "result-good";  // 緑
+            fortuneClass = "result-good";
         } else {
-            fortuneClass = "result-normal"; // グレー
+            fortuneClass = "result-normal";
         }
-        
+
         resultLi.innerHTML = `
-            <p class="mb-2">${name} さんの今日の運勢：${randomFortune}</p>
-            <p class="fs-6 text-muted mb-1">ラッキーアイテム：${randomItem}</p>
-            <p class="fs-6 text-muted mb-0">ラッキーカラー：${randomColor}</p>
+            <p class="mb-2 fw-bold">${name} さんの今日の運勢：${randomFortune}</p>
+            <p class="fs-6 mb-1">ラッキーアイテム：${randomItem}</p>
+            <p class="fs-6 mb-0">ラッキーカラー：${randomColor}</p>
         `;
 
         resultLi.classList.add("list-group-item", "text-center", "fw-bold", "fs-5", "result-card", fortuneClass);
-
         ul.appendChild(resultLi);
 
+        // Xシェアボタンの更新
         const shareBtn = document.getElementById("share-btn");
-        //シェアした際の文面が出てくる
         const shareText = encodeURIComponent(`${name} さんの今日の運勢は【${randomFortune}】でした！\nラッキーアイテム：${randomItem}\nラッキーカラー：${randomColor}\n\n#MyJavaScriptおみくじ`);
         shareBtn.href = `https://twitter.com/intent/tweet?text=${shareText}`;
-        //Xのシェアボタン
         shareBtn.classList.remove("d-none");
 
-        // ★ 3. おみくじ結果が出たら、「今日引いたよ（today）」をLocalStorageに保存！
         localStorage.setItem("omikuji_last_date", today);
 
-    }, 1500); // ← ここで待ち時間を調整（1500 = 1.5秒）
+    }, 1500);
 });

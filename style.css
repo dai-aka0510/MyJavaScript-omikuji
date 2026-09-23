@@ -1,48 +1,109 @@
-/* 結果カードの基本アニメーション */
+/* style.css - 和風モダンデザイン */
+
+/* アプリ全体のカード（半透明の和紙・ガラス風） */
+.omikuji-card {
+    background: rgba(255, 255, 255, 0.92) !important;
+    backdrop-filter: blur(8px); /* 背景をほんのりぼかす現代風Web演出 */
+    border: 2px solid #d4af37 !important; /* 品のあるゴールド枠 */
+}
+
+/* タイトルフォントの装飾 */
+.omikuji-title {
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #b71c1c !important;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* ★PUSH★ ボタン（神社のお札風立体ボタン） */
+.btn-omikuji {
+    background: linear-gradient(135deg, #d32f2f 0%, #9a0007 100%) !important;
+    color: #fff !important;
+    border: 2px solid #ffe082 !important;
+    box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
+    transition: all 0.2s ease;
+    letter-spacing: 3px;
+}
+
+.btn-omikuji:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(211, 47, 47, 0.6);
+}
+
+.btn-omikuji:active {
+    transform: translateY(1px);
+}
+
+/* 結果カードの基本スタイル */
 .result-card {
     transition: all 0.5s ease;
-    border-width: 3px !important;
+    border-width: 2px !important;
+    border-radius: 12px !important;
 }
 
-/* 1. 超大吉：金ピカ・グラデーション豪華仕様 */
+/* 運勢別スタイル */
+/* 1. 超大吉：金ピカ輝き仕様 */
 .result-ultra {
-    background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%) !important;
-    color: #856404 !important;
-    border-color: #ffc107 !important;
-    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
-    transform: scale(1.02);
+    background: linear-gradient(135deg, #fff9c4 0%, #fff176 100%) !important;
+    color: #f57f17 !important;
+    border-color: #fbc02d !important;
+    box-shadow: 0 6px 20px rgba(251, 192, 45, 0.5);
+    transform: scale(1.03);
 }
-.result-ultra p {
-    color: #856404 !important; /* 文字色を強制上書き */
-}
+.result-ultra p { color: #f57f17 !important; }
 
-/* 2. 大吉：華やかな赤 */
+/* 2. 大吉：華やかな和赤 */
 .result-great {
-    background-color: #f8d7da !important;
-    color: #842029 !important;
-    border-color: #f5c2c7 !important;
-    box-shadow: 0 4px 10px rgba(220, 53, 69, 0.2);
+    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%) !important;
+    color: #c62828 !important;
+    border-color: #e57373 !important;
+    box-shadow: 0 4px 12px rgba(198, 40, 40, 0.2);
 }
-.result-great p {
-    color: #842029 !important;
-}
+.result-great p { color: #c62828 !important; }
 
-/* 3. 中吉・小吉：明るい緑 */
+/* 3. 中吉・小吉：爽やかな抹茶緑 */
 .result-good {
-    background-color: #d1e7dd !important;
-    color: #0f5132 !important;
-    border-color: #badbcc !important;
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%) !important;
+    color: #2e7d32 !important;
+    border-color: #81c784 !important;
 }
-.result-good p {
-    color: #0f5132 !important;
+.result-good p { color: #2e7d32 !important; }
+
+/* 4. 吉・末吉：落ち着いた墨色風 */
+.result-normal {
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%) !important;
+    color: #424242 !important;
+    border-color: #e0e0e0 !important;
+}
+.result-normal p { color: #424242 !important; }
+
+/* X (Twitter) シェアボタンの洗練化 */
+.btn-x-share {
+    background-color: #0f1419 !important;
+    color: #ffffff !important;
+    border-radius: 50px !important;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+.btn-x-share:hover {
+    background-color: #272c30 !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
 }
 
-/* 4. 吉・末吉：落ち着いたグレー */
-.result-normal {
-    background-color: #f8f9fa !important;
-    color: #41464b !important;
-    border-color: #e2e3e5 !important;
+.omikuji-box-anim {
+    display: inline-block;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    animation: shakashaka 0.3s infinite alternate ease-in-out;
 }
-.result-normal p {
-    color: #41464b !important;
+
+/* 左右に傾いてカタカタ揺れる動き（CSS Keyframes） */
+@keyframes shakashaka {
+    0% {
+        transform: rotate(-18deg) translateY(0);
+    }
+    100% {
+        transform: rotate(18deg) translateY(-6px);
+    }
 }
